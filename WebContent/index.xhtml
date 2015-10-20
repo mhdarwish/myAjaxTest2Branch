@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Insert title here</title>
+	<h:outputScript library="javax.faces" name="jsf.js" />
+	<!-- <h:outputScript library="javascript" name="prototype-1.6.0.2.js" /> -->
+	<script type="text/javascript">
+		var monitor = function(data) {
+			alert("onevent:monitor");
+			if (data.status == "begin") {
+				loading.style.display = "block";
+			} else if (data.status == "success") {
+				loading.style.display = "none";
+			}
+		};
+
+		var handler = function(data) {
+			alert("onerror:inside the handleAjax function");
+			console.log(data);
+			
+			console.log("Error Description: " + data.errorName);
+			console.log("Error Description: "+data.description);
+			console.log("Error Name: "+data.errorName);
+			console.log("Error errorMessage: "+data.errorMessage);
+			console.log("httpError: "+data.httpError);
+			console.log("emptyResponse: "+data.emptyResponse);
+			console.log("maleformed: "+data.maleformed);
+			console.log("serverError: "+data.serverError);
+		};
+
+		/* jsf.ajax.addOnEvent(monitor); */
+		jsf.ajax.addOnError(handler);
+	</script>
+</h:head>
+<h:body>
+	<f:view>
+		<h:form prependId="false" id="frm">
+			<h:inputText id="input" value="#{indexBean.message}" />
+	            #{' '}
+	            <h:commandButton id="btnDisplayText" value="Display Text"
+				action="#{indexBean.action}">
+				
+				<ui:remove>
+					<f:ajax execute="@this input" onevent="monitor"></f:ajax>
+				</ui:remove>
+				
+					<f:ajax execute="@this input" onevent="monitor"></f:ajax>
+				
+			</h:commandButton>
+			<h:messages style="color:red" />
+		</h:form>
+	</f:view>
+</h:body>
+</html>
